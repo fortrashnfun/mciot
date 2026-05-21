@@ -2,127 +2,84 @@
 
                      PRESERVE8
                      THUMB
-
                      AREA |.text|, CODE, READONLY
                      EXPORT __main
-
 __main
-
                      MOVS R6, #05
                      MOVS R4, R6
                      SUBS R4, R4, #1
-
 LOOP
-
                      MOVS R7, R4
                      MULS R7, R6, R7
                      MOVS R6, R7
-
                      SUBS R4, R4, #1
                      BNE  LOOP
-
 STOP                 B    STOP
-
                      END
 
 //Swap 10 bytes 
 
                      PRESERVE8
                      THUMB
-
                      AREA |.text|, CODE, READONLY
                      EXPORT __main
-
 __main
-
                      LDR   R0, =0x20000000
                      LDR   R1, =0x20000010
                      MOVS R2, #10
-
 LOOP
-
                      LDRB R3, [R0]
                      LDRB R4, [R1]
-
                      STRB R4, [R0]
                      STRB R3, [R1]
-
                      ADDS R0, R0, #1
                      ADDS R1, R1, #1
-
                      SUBS R2, R2, #1
                      BNE  LOOP
-
 STOP                 B    STOP
-
                      END
 
 // Push and Pop
 
                      PRESERVE8           
                      THUMB                
-
                      AREA |.text|, CODE, READONLY
                      EXPORT __main
-
 __main
-
                      MOVS R0, #10
                      MOVS R1, #20
-
                      PUSH {R0, R1}
-
                      MOVS R0, #0
                      MOVS R1, #0
-
                      POP  {R0, R1}
-
 STOP                 B    STOP
-
                      END
-
 
 // Switch Case
 
                      PRESERVE8
                      THUMB
-
                      AREA |.text|, CODE, READONLY
                      EXPORT __main
-
 __main
-
                      MOVS R0, #2
-
                      CMP  R0, #1
                      BEQ  CASE1
-
                      CMP  R0, #2
                      BEQ  CASE2
-
                      CMP  R0, #3
                      BEQ  CASE3
-
                      B    STOP
-
 CASE1
-
                      MOVS R1, #10
                      B    STOP
-
 CASE2
-
                      MOVS R1, #20
                      B    STOP
-
 CASE3
-
                      MOVS R1, #30
-
 STOP
-
                      B    STOP
-
                      END
 
 
@@ -132,77 +89,51 @@ file1 - functioncaller
 
                      PRESERVE8
                      THUMB
-
                      AREA |.text|, CODE, READONLY
                      EXPORT __main
                      EXTERN func
-
 __main
-
                      BL   func
-
                      MOVS R0, #40
                      NOP
-
 STOP                 B    STOP
-
                      END
 
 file2 - function
 
                      PRESERVE8
                      THUMB
-
                      AREA |.text|, CODE, READONLY
                      EXPORT func
                      EXTERN func2
-
 func
-
                      PUSH {LR}
-
                      MOVS R0, #5
-
                      BL   func2
-
                      POP  {PC}
-
                      END
 
 file 3 - function2
 
                      PRESERVE8
                      THUMB
-
                      AREA |.text|, CODE, READONLY
                      EXPORT func2
-
 func2
-
                      MOVS R1, #10
-
                      BX   LR
-
                      END
 
 // Bit clear and Extract 
 
                      PRESERVE8
                      THUMB
-
                      AREA |.text|, CODE, READONLY
                      EXPORT __main
-
 __main
-
                      LDR  R0, =0xABCDEF01
-
                      MOVS R1, #5
-
                      RORS R0, R0, R1
-
                      ANDS R0, R0, #1
-
 STOP                 B    STOP
-
                      END
