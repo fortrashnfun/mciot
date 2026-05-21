@@ -1,0 +1,26 @@
+// factorial
+
+PRESERVE8
+THUMB
+
+AREA |.text|, CODE, READONLY
+EXPORT __main
+
+__main
+
+    MOVS R6, #05      ; R6 = 5
+    MOVS R4, R6       ; R4 = 5
+    SUBS R4, R4, #1   ; R4 = 4
+
+LOOP
+    MOVS R7, R4       ; R7 = current multiplier
+    MULS R7, R6, R7  ; R7 = R6 * R7
+    MOVS R6, R7       ; store result back in R6
+
+    SUBS R4, R4, #1   ; decrement counter
+    BNE LOOP          ; repeat until R4 = 0
+
+STOP
+    B STOP
+
+END
