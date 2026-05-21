@@ -1,0 +1,211 @@
+// RGB
+
+#include <stdio.h>
+#include "NUC1xx.h"
+#include "Driver/DrvGPIO.h"
+#include "Driver/DrvSYS.h"
+
+void Init_LED()
+{
+    DrvGPIO_Open(E_GPA, 12, E_IO_OUTPUT);
+    DrvGPIO_Open(E_GPA, 13, E_IO_OUTPUT);
+    DrvGPIO_Open(E_GPA, 14, E_IO_OUTPUT);
+
+    DrvGPIO_SetBit(E_GPA, 12);
+    DrvGPIO_SetBit(E_GPA, 13);
+    DrvGPIO_SetBit(E_GPA, 14);
+}
+
+int main(void)
+{
+    int i;
+
+    UNLOCKREG();
+    DrvSYS_Open(48000000);
+    LOCKREG();
+
+    Init_LED();
+
+    while(1)
+    {
+        for(i = 12; i <= 14; i++)
+        {
+            DrvGPIO_ClrBit(E_GPA, i);
+
+            DrvSYS_Delay(300000);
+
+            DrvGPIO_SetBit(E_GPA, i);
+
+            DrvSYS_Delay(300000);
+        }
+    }
+}
+
+
+// LED Display
+
+#include <stdio.h>
+#include "NUC1xx.h"
+#include "Driver/DrvGPIO.h"
+#include "Driver/DrvSYS.h"
+
+void delay()
+{
+    DrvSYS_Delay(300000);
+}
+
+int main(void)
+{
+    UNLOCKREG();
+    DrvSYS_Open(48000000);
+    LOCKREG();
+
+    DrvGPIO_Open(E_GPC, 0, E_IO_OUTPUT);
+    DrvGPIO_Open(E_GPC, 1, E_IO_OUTPUT);
+    DrvGPIO_Open(E_GPC, 2, E_IO_OUTPUT);
+
+    while(1)
+    {
+        DrvGPIO_SetBit(E_GPC, 0);
+        delay();
+
+        DrvGPIO_SetBit(E_GPC, 1);
+        delay();
+
+        DrvGPIO_SetBit(E_GPC, 2);
+        delay();
+    }
+}
+
+
+// Buzzer program
+
+#include <stdio.h>
+#include "NUC1xx.h"
+#include "Driver/DrvGPIO.h"
+#include "Driver/DrvSYS.h"
+
+int main(void)
+{
+    UNLOCKREG();
+    DrvSYS_Open(48000000);
+    LOCKREG();
+
+    DrvGPIO_Open(E_GPB, 11, E_IO_OUTPUT);
+
+    while(1)
+    {
+        DrvGPIO_ClrBit(E_GPB, 11);
+
+        DrvSYS_Delay(1000000);
+
+        DrvGPIO_SetBit(E_GPB, 11);
+
+        DrvSYS_Delay(1000000);
+    }
+}
+
+
+// ScanKey
+
+#include <stdio.h>
+#include "NUC1xx.h"
+#include "Driver/DrvSYS.h"
+#include "Driver/DrvSCANKEY.h"
+
+int main(void)
+{
+    int key;
+
+    UNLOCKREG();
+    DrvSYS_Open(48000000);
+    LOCKREG();
+
+    OpenKeyPad();
+
+    while(1)
+    {
+        key = ScanKey();
+
+        printf("%d\n", key);
+
+        DrvSYS_Delay(300000);
+    }
+}
+
+// seven segment
+
+#include <stdio.h>
+#include "NUC1xx.h"
+#include "Driver/DrvGPIO.h"
+#include "Driver/DrvSYS.h"
+#include "Seven_Segment.h"
+
+int main(void)
+{
+    int i;
+
+    UNLOCKREG();
+    DrvSYS_Open(48000000);
+    LOCKREG();
+
+    while(1)
+    {
+        for(i = 0; i <= 999; i++)
+        {
+            ShowSevenSegment(0, i % 10);
+
+            DrvSYS_Delay(300000);
+        }
+    }
+}
+
+// ADC
+
+#include <stdio.h>
+#include "NUC1xx.h"
+#include "Driver/DrvADC.h"
+#include "Driver/DrvSYS.h"
+
+int main(void)
+{
+    int value;
+
+    UNLOCKREG();
+    DrvSYS_Open(48000000);
+    LOCKREG();
+
+    DrvADC_Open(ADC_SINGLE_END, ADC_SINGLE_CYCLE_OP, 0x1);
+
+    while(1)
+    {
+        DrvADC_StartConvert();
+
+        value = DrvADC_GetConversionData(0);
+
+        printf("%d\n", value);
+
+        DrvSYS_Delay(300000);
+    }
+}
+
+// Raspberry PI led blink
+
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+LED = 18
+
+GPIO.setup(LED, GPIO.OUT)
+
+while True:
+
+    GPIO.output(LED, 1)
+
+    time.sleep(1)
+
+    GPIO.output(LED, 0)
+
+    time.sleep(1)
