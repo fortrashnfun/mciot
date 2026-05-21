@@ -126,14 +126,25 @@ func2
 
 // Bit clear and Extract 
 
+extract 
                      PRESERVE8
                      THUMB
                      AREA |.text|, CODE, READONLY
                      EXPORT __main
 __main
                      LDR  R0, =0xABCDEF01
-                     MOVS R1, #5
-                     RORS R0, R0, R1
-                     ANDS R0, R0, #1
-STOP                 B    STOP
+                     LSLS R0, R0, #20
+                     LSRS R0, R0, #28
+                     NOP
+                     END
+clear
+
+                     PRESERVE8
+                     THUMB
+                     AREA |.text|, CODE, READONLY
+                     EXPORT __main
+__main
+                     LDR  R0, =0xABCDEF01
+                     BIC  R1, R0, #32
+                     NOP
                      END
