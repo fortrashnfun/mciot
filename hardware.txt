@@ -177,14 +177,11 @@ int main(void)
 
     DrvADC_Open(ADC_SINGLE_END, ADC_SINGLE_CYCLE_OP, 0x1);
 
-    while(1)
-    {
-        DrvADC_StartConvert();
-
+    while(1){
+        DrvADC_StartConvert();    
+        while(DrvADC_IsConversionDone() == FALSE);
         value = DrvADC_GetConversionData(0);
-
         printf("%d\n", value);
-
         DrvSYS_Delay(300000);
     }
 }
